@@ -42,12 +42,12 @@ function gameboard() {
 
     if (isVertical) {
       if (y + ship.length > 10) {
-        throw new Error("Ship out of bounds");
+        throw new Error("Ship placement out of bounds");
       }
 
       for (let i = 0; i < ship.length; i++) {
         if (board[y + i][x] !== null) {
-          throw new Error("Ships overlap");
+          throw new Error("Ship placement overlap");
         }
       }
 
@@ -56,12 +56,12 @@ function gameboard() {
       }
     } else {
       if (x + ship.length > 10) {
-        throw new Error("Ship out of bounds");
+        throw new Error("Ship placement out of bounds");
       }
 
       for (let i = 0; i < ship.length; i++) {
         if (board[y][x + i] !== null) {
-          throw new Error("Ships overlap");
+          throw new Error("Ship placement overlap");
         }
       }
 

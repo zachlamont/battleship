@@ -48,70 +48,64 @@ describe("gameboard", () => {
   });
 });
 
-/*
+test("should place a ship horizontally on the board", () => {
+  const testGameboard = gameboard();
+  const testShip = ship(3);
+  testGameboard.placeShip(testShip, 0, 0, false);
+  expect(testGameboard.board[0][0].ship).toEqual(testShip);
+  expect(testGameboard.board[0][1].ship).toEqual(testShip);
+  expect(testGameboard.board[0][2].ship).toEqual(testShip);
+});
 
-  test("should place a ship horizontally on the board", () => {
-    const testGameboard = gameboard();
-    const testShip = ship(3);
-    testGameboard.placeShip(testShip, 0, 0, false);
-    expect(testGameboard.board[0][0].ship).toEqual(testShip);
-    expect(testGameboard.board[0][1].ship).toEqual(testShip);
-    expect(testGameboard.board[0][2].ship).toEqual(testShip);
-  });
+test("should place a ship vertically on the board", () => {
+  const testGameboard = gameboard();
+  const testShip = ship(3);
+  testGameboard.placeShip(testShip, 0, 0, true);
+  expect(testGameboard.board[0][0].ship).toEqual(testShip);
+  expect(testGameboard.board[1][0].ship).toEqual(testShip);
+  expect(testGameboard.board[2][0].ship).toEqual(testShip);
+});
 
-  test("should place a ship vertically on the board", () => {
-    const testGameboard = gameboard();
-    const testShip = ship(3);
-    testGameboard.placeShip(testShip, 0, 0, true);
-    expect(testGameboard.board[0][0].ship).toEqual(testShip);
-    expect(testGameboard.board[1][0].ship).toEqual(testShip);
-    expect(testGameboard.board[2][0].ship).toEqual(testShip);
-  });
+test("should throw an error when placing a ship out of bounds horizontally", () => {
+  const testGameboard = gameboard();
+  const testShip = ship(5);
+  expect(() => testGameboard.placeShip(testShip, 8, 9, false)).toThrow(
+    "Ship placement out of bounds"
+  );
+});
 
-  test("should throw an error when placing a ship out of bounds horizontally", () => {
-    const testGameboard = gameboard();
-    const testShip = ship(5);
-    expect(() => testGameboard.placeShip(testShip, 8, 9, false)).toThrow(
-      "Ship placement out of bounds"
-    );
-  });
+test("should throw an error when placing a ship out of bounds vertically", () => {
+  const testGameboard = gameboard();
+  const testShip = ship(5);
+  expect(() => testGameboard.placeShip(testShip, 9, 8, true)).toThrow(
+    "Ship placement out of bounds"
+  );
+});
 
-  test("should throw an error when placing a ship out of bounds vertically", () => {
-    const testGameboard = gameboard();
-    const testShip = ship(5);
-    expect(() => testGameboard.placeShip(testShip, 9, 8, true)).toThrow(
-      "Ship placement out of bounds"
-    );
-  });
+test("should throw an error when placing a ship overlapping horizontally", () => {
+  const testGameboard = gameboard();
+  const testShip1 = ship(3);
+  const testShip2 = ship(4);
+  testGameboard.placeShip(testShip1, 0, 0, false);
+  expect(() => testGameboard.placeShip(testShip2, 0, 0, false)).toThrow(
+    "Ship placement overlap"
+  );
+});
 
-  test("should throw an error when placing a ship overlapping horizontally", () => {
-    const testGameboard = gameboard();
-    const testShip1 = ship(3);
-    const testShip2 = ship(4);
-    testGameboard.placeShip(testShip1, 0, 0, false);
-    expect(() => testGameboard.placeShip(testShip2, 0, 0, false)).toThrow(
-      "Ship placement overlap"
-    );
-  });
+test("should throw an error when placing a ship overlapping vertically", () => {
+  const testGameboard = gameboard();
+  const testShip1 = ship(3);
+  const testShip2 = ship(4);
+  testGameboard.placeShip(testShip1, 0, 0, true);
+  expect(() => testGameboard.placeShip(testShip2, 0, 0, true)).toThrow(
+    "Ship placement overlap"
+  );
+});
 
-  test("should throw an error when placing a ship overlapping vertically", () => {
-    const testGameboard = gameboard();
-    const testShip1 = ship(3);
-    const testShip2 = ship(4);
-    testGameboard.placeShip(testShip1, 0, 0, true);
-    expect(() => testGameboard.placeShip(testShip2, 0, 0, true)).toThrow(
-      "Ship placement overlap"
-    );
-  });
-
-  test("should receive an attack and mark the corresponding cell as hit", () => {
-    const testGameboard = gameboard();
-    const testShip = ship(3);
-    testGameboard.placeShip(testShip, 0, 0, false);
-    testGameboard.receiveAttack(0, 0);
-    expect(testGameboard.board[0][0].isHit).toBe(true);
-  });
-
-
-
- */
+test("should receive an attack and mark the corresponding cell as hit", () => {
+  const testGameboard = gameboard();
+  const testShip = ship(3);
+  testGameboard.placeShip(testShip, 0, 0, false);
+  testGameboard.receiveAttack(0, 0);
+  expect(testGameboard.board[0][0].isHit).toBe(true);
+});
