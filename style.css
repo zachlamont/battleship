@@ -1,16 +1,16 @@
-*{
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
 }
 #player-board {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
   background-color: rgb(141, 141, 240);
   width: 500px;
   height: 500px;
 }
 #computer-board {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
   background-color: rgb(201, 227, 161);
   width: 500px;
   height: 500px;
@@ -22,10 +22,14 @@
   height: 50px;
 }
 
-.ship{
-    background-color: rgb(48, 48, 207);
+.ship {
+  background-color: rgb(48, 48, 207);
 }
 
-.hit{
-    background-color: red;
+.hit {
+  background-color: red;
+}
+
+.miss {
+  background-color: orange;
 }
