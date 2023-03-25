@@ -137,3 +137,5 @@ describe("areAllShipsSunk", () => {
     expect(testGameboard.areAllShipsSunk()).toBe(false);
   });
 });
+
+//TEST MAIN GAME LOOP
