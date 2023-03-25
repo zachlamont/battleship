@@ -72,7 +72,7 @@ function gameboard() {
 
     ships.push(ship);
   }
-
+  /*
   function receiveAttack(x, y) {
     if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error("Invalid coordinates");
@@ -81,6 +81,23 @@ function gameboard() {
     const square = board[y][x];
     if (square === null) {
       return false;
+    } else {
+      square.isHit = true;
+      square.ship.hit();
+      return true;
+    }
+  }
+*/
+  function receiveAttack(x, y) {
+    if (x < 0 || x >= 10 || y < 0 || y >= 10) {
+      throw new Error("Invalid coordinates");
+    }
+
+    const square = board[y][x];
+    if (square === null) {
+      // Mark square as hit even if there is no ship
+      board[y][x] = { isHit: true };
+      return true;
     } else {
       square.isHit = true;
       square.ship.hit();
@@ -162,8 +179,13 @@ function renderBoard(board, element) {
       square.classList.add("square");
       if (board.board[i][j] !== null) {
         if (board.board[i][j].isHit) {
-          square.classList.add("hit");
-          square.textContent = "hit";
+          if (board.board[i][j].ship) {
+            square.classList.add("hit");
+            square.textContent = "hit";
+          } else {
+            square.classList.add("miss");
+            square.textContent = "miss";
+          }
         } else {
           square.classList.add("ship");
           square.textContent = "ship";
