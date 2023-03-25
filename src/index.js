@@ -153,6 +153,9 @@ const playerBoardElement = document.getElementById("player-board");
 const computerBoardElement = document.getElementById("computer-board");
 
 function renderBoard(board, element) {
+  // Clear the board before rendering
+  element.innerHTML = "";
+
   for (let i = 0; i < board.board.length; i++) {
     for (let j = 0; j < board.board[i].length; j++) {
       const square = document.createElement("div");
