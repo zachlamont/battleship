@@ -109,3 +109,31 @@ test("should receive an attack and mark the corresponding cell as hit", () => {
   testGameboard.receiveAttack(0, 0);
   expect(testGameboard.board[0][0].isHit).toBe(true);
 });
+
+describe("areAllShipsSunk", () => {
+  test("should return true when all ships are sunk", () => {
+    const testGameboard = gameboard();
+    const testShip1 = ship(2);
+    const testShip2 = ship(3);
+    testGameboard.placeShip(testShip1, 0, 0, false);
+    testGameboard.placeShip(testShip2, 1, 1, true);
+    testShip1.hit(0);
+    testShip1.hit(1);
+    testShip2.hit(1);
+    testShip2.hit(2);
+    testShip2.hit(3);
+    expect(testGameboard.areAllShipsSunk()).toBe(true);
+  });
+
+  test("should return false when not all ships are sunk", () => {
+    const testGameboard = gameboard();
+    const testShip1 = ship(2);
+    const testShip2 = ship(3);
+    testGameboard.placeShip(testShip1, 0, 0, false);
+    testGameboard.placeShip(testShip2, 1, 1, true);
+    testShip1.hit(0);
+    testShip2.hit(1);
+    testShip2.hit(2);
+    expect(testGameboard.areAllShipsSunk()).toBe(false);
+  });
+});
