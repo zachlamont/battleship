@@ -32,7 +32,23 @@ function ship(length) {
 //GAMEBOARD FACTORY
 
 function gameboard() {
-  const board = Array.from(Array(10), () => Array(10).fill(null));
+/*
+  const board = Array.from(Array(10), () =>
+    Array(10).fill({
+      isHit: false,
+      ship: null,
+    })
+  );
+  */
+
+  const board = Array.from(Array(10), () =>
+    Array(10).fill().map(() => ({
+        isHit: false,
+        ship: null,
+    }))
+);
+
+
   const ships = [];
 
   function placeShip(ship, x, y, isVertical) {
@@ -46,7 +62,7 @@ function gameboard() {
       }
 
       for (let i = 0; i < ship.length; i++) {
-        if (board[y + i][x] !== null) {
+        if (board[y + i][x].ship !== null) {
           throw new Error("Ship placement overlap");
         }
       }
@@ -60,7 +76,7 @@ function gameboard() {
       }
 
       for (let i = 0; i < ship.length; i++) {
-        if (board[y][x + i] !== null) {
+        if (board[y][x + i].ship !== null) {
           throw new Error("Ship placement overlap");
         }
       }
@@ -72,36 +88,22 @@ function gameboard() {
 
     ships.push(ship);
   }
-  /*
+
   function receiveAttack(x, y) {
     if (x < 0 || x >= 10 || y < 0 || y >= 10) {
       throw new Error("Invalid coordinates");
     }
 
     const square = board[y][x];
-    if (square === null) {
+    if (square.ship !== null && square.isHit == false) {
+      square.isHit = true;
+      square.ship.hit();
+      return true;
+    } else if (square && square.isHit == false) {
+      square.isHit = true;
+      return true;
+    } else {
       return false;
-    } else {
-      square.isHit = true;
-      square.ship.hit();
-      return true;
-    }
-  }
-*/
-  function receiveAttack(x, y) {
-    if (x < 0 || x >= 10 || y < 0 || y >= 10) {
-      throw new Error("Invalid coordinates");
-    }
-
-    const square = board[y][x];
-    if (square === null) {
-      // Mark square as hit even if there is no ship
-      board[y][x] = { isHit: true };
-      return true;
-    } else {
-      square.isHit = true;
-      square.ship.hit();
-      return true;
     }
   }
 
@@ -136,7 +138,7 @@ const player = {
     gameboard.receiveAttack(x, y);
   },
 };
-
+/*
 const computer = {
   attack(gameboard) {
     let attackCompleted = false;
@@ -149,6 +151,23 @@ const computer = {
         !gameboard.board[y][x].isHit
       ) {
         console.log(gameboard.board[y][x]);
+        gameboard.receiveAttack(x, y);
+        attackCompleted = true;
+      }
+    }
+  },
+};
+*/
+
+const computer = {
+  attack(gameboard) {
+    let attackCompleted = false;
+    while (!attackCompleted) {
+      const x = Math.floor(Math.random() * 10);
+      const y = Math.floor(Math.random() * 10);
+      const square = gameboard.board[y][x];
+      console.log(square);
+      if (square && !square.isHit) {
         gameboard.receiveAttack(x, y);
         attackCompleted = true;
       }
@@ -177,9 +196,27 @@ function renderBoard(board, element) {
     for (let j = 0; j < board.board[i].length; j++) {
       const square = document.createElement("div");
       square.classList.add("square");
+
+      if (board.board[i][j].ship === null && board.board[i][j].isHit === true) {
+        console.log("yo" + board.board[i][j].ship);
+        console.log("is hit" + board.board[i][j].isHit);
+        square.classList.add("miss");
+        square.textContent = "miss";
+      }
+      if (board.board[i][j].ship !== null) {
+        if (board.board[i][j].isHit === true) {
+          square.classList.add("hit");
+          square.textContent = "hit";
+        } else {
+          square.classList.add("ship");
+          square.textContent = "ship";
+        }
+      }
+
+      /*
       if (board.board[i][j] !== null) {
-        if (board.board[i][j].isHit) {
-          if (board.board[i][j].ship) {
+        if (board.board[i][j].isHit === true) {
+          if (board.board[i][j].ship !== null) {
             square.classList.add("hit");
             square.textContent = "hit";
           } else {
@@ -187,10 +224,13 @@ function renderBoard(board, element) {
             square.textContent = "miss";
           }
         } else {
-          square.classList.add("ship");
-          square.textContent = "ship";
+          if (board.board[i][j].ship !== null) {
+            square.classList.add("ship");
+            square.textContent = "ship";
+          }
         }
       }
+*/
 
       square.addEventListener("click", () => {
         if (currentPlayer === player) {
