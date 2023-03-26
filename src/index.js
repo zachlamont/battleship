@@ -32,22 +32,14 @@ function ship(length) {
 //GAMEBOARD FACTORY
 
 function gameboard() {
-/*
   const board = Array.from(Array(10), () =>
-    Array(10).fill({
-      isHit: false,
-      ship: null,
-    })
-  );
-  */
-
-  const board = Array.from(Array(10), () =>
-    Array(10).fill().map(() => ({
+    Array(10)
+      .fill()
+      .map(() => ({
         isHit: false,
         ship: null,
-    }))
-);
-
+      }))
+  );
 
   const ships = [];
 
@@ -138,26 +130,6 @@ const player = {
     gameboard.receiveAttack(x, y);
   },
 };
-/*
-const computer = {
-  attack(gameboard) {
-    let attackCompleted = false;
-    while (!attackCompleted) {
-      const x = Math.floor(Math.random() * 10);
-      const y = Math.floor(Math.random() * 10);
-      if (
-        gameboard.board[y] &&
-        gameboard.board[y][x] &&
-        !gameboard.board[y][x].isHit
-      ) {
-        console.log(gameboard.board[y][x]);
-        gameboard.receiveAttack(x, y);
-        attackCompleted = true;
-      }
-    }
-  },
-};
-*/
 
 const computer = {
   attack(gameboard) {
@@ -212,25 +184,6 @@ function renderBoard(board, element) {
           square.textContent = "ship";
         }
       }
-
-      /*
-      if (board.board[i][j] !== null) {
-        if (board.board[i][j].isHit === true) {
-          if (board.board[i][j].ship !== null) {
-            square.classList.add("hit");
-            square.textContent = "hit";
-          } else {
-            square.classList.add("miss");
-            square.textContent = "miss";
-          }
-        } else {
-          if (board.board[i][j].ship !== null) {
-            square.classList.add("ship");
-            square.textContent = "ship";
-          }
-        }
-      }
-*/
 
       square.addEventListener("click", () => {
         if (currentPlayer === player) {
