@@ -113,17 +113,29 @@ export { reverseString, ship, gameboard };
 const playerBoard = gameboard();
 const computerBoard = gameboard();
 
-playerBoard.placeShip(ship(5), 0, 0, true);
-playerBoard.placeShip(ship(4), 1, 0, true);
-playerBoard.placeShip(ship(3), 2, 0, true);
-playerBoard.placeShip(ship(3), 3, 0, true);
-playerBoard.placeShip(ship(2), 4, 0, true);
+function placeRandomShips(board) {
+  const shipLengths = [5, 4, 3, 3, 2];
 
-computerBoard.placeShip(ship(5), 5, 0, true);
-computerBoard.placeShip(ship(4), 6, 0, true);
-computerBoard.placeShip(ship(3), 7, 0, true);
-computerBoard.placeShip(ship(3), 8, 0, true);
-computerBoard.placeShip(ship(2), 9, 0, true);
+  for (let length of shipLengths) {
+    let shipPlaced = false;
+
+    while (!shipPlaced) {
+      try {
+        const isHorizontal = Math.random() >= 0.5;
+        const row = Math.floor(Math.random() * 9);
+        const col = Math.floor(Math.random() * 9);
+
+        board.placeShip(ship(length), row, col, isHorizontal);
+        shipPlaced = true;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+}
+
+placeRandomShips(playerBoard);
+placeRandomShips(computerBoard);
 
 const player = {
   attack(gameboard, x, y) {
@@ -186,7 +198,7 @@ function renderBoard(board, element) {
       }
 
       square.addEventListener("click", () => {
-        if (currentPlayer === player) {
+        if (currentPlayer === player && !board.board[i][j].isHit) {
           currentPlayer.attack(computerBoard, j, i);
           renderBoard(computerBoard, computerBoardElement);
           switchTurns();
@@ -221,3 +233,5 @@ function playGame() {
 renderBoard(playerBoard, playerBoardElement);
 renderBoard(computerBoard, computerBoardElement);
 playGame();
+
+
