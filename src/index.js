@@ -144,16 +144,59 @@ const player = {
 };
 
 const computer = {
+  hasHitShip: false,
+  lastHit: null, // [x, y] coordinates of the last hit
+  adjacentSquares: [
+    [-1, 0],
+    [0, -1],
+    [1, 0],
+    [0, 1],
+  ], // adjacent squares to target
+
   attack(gameboard) {
     let attackCompleted = false;
     while (!attackCompleted) {
-      const x = Math.floor(Math.random() * 10);
-      const y = Math.floor(Math.random() * 10);
+      let x, y;
+      if (this.hasHitShip) {
+        // target an adjacent square to the last hit
+        const [lastHitX, lastHitY] = this.lastHit;
+        const [offsetX, offsetY] = this.adjacentSquares.shift(); // remove and use the first adjacent square
+        x = lastHitX + offsetX;
+        y = lastHitY + offsetY;
+      } else {
+        // choose a random square
+        x = Math.floor(Math.random() * 10);
+        y = Math.floor(Math.random() * 10);
+      }
       const square = gameboard.board[y][x];
       console.log(square);
       if (square && !square.isHit) {
-        gameboard.receiveAttack(x, y);
+        if (square.ship) {
+          // if hit a ship, mark as hit and set hasHitShip to true
+          gameboard.receiveAttack(x, y);
+          this.hasHitShip = true;
+          this.lastHit = [x, y];
+          this.adjacentSquares = [
+            [-1, 0],
+            [0, -1],
+            [1, 0],
+            [0, 1],
+          ]; // reset the adjacent squares
+        } else {
+          // if miss, mark as miss and set hasHitShip to false
+          gameboard.receiveAttack(x, y);
+          this.hasHitShip = false;
+        }
         attackCompleted = true;
+      } else if (this.hasHitShip && this.adjacentSquares.length === 0) {
+        // if no more adjacent squares to target, reset hasHitShip and adjacentSquares
+        this.hasHitShip = false;
+        this.adjacentSquares = [
+          [-1, 0],
+          [0, -1],
+          [1, 0],
+          [0, 1],
+        ];
       }
     }
   },
@@ -233,5 +276,3 @@ function playGame() {
 renderBoard(playerBoard, playerBoardElement);
 renderBoard(computerBoard, computerBoardElement);
 playGame();
-
-
