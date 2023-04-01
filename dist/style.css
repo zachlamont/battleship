@@ -1,35 +1,102 @@
 * {
   box-sizing: border-box;
+
+  font-family: "Staatliches", cursive;
+}
+
+h1 {
+  font-family: "Staatliches", cursive;
+  font-size: 4em;
+}
+
+h2 {
+  font-family: "Staatliches", cursive;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.restart-text {
+  font-family: "Staatliches", cursive;
+  font-size: 1.5em;
+  color: rgb(247, 251, 255);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body {
+  background-color: rgb(217, 223, 223);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.boards-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 #player-board {
+  margin: 20px;
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(141, 141, 240);
-  width: 500px;
-  height: 500px;
+  background-color: rgb(217, 223, 223);
+  width: 420px;
+  min-width: 420px;
+  height: auto;
 }
 #computer-board {
+  margin: 20px;
   display: flex;
   flex-wrap: wrap;
-  background-color: rgb(201, 227, 161);
-  width: 500px;
-  height: 500px;
+  background-color: rgb(217, 223, 223);
+  width: 420px;
+  min-width: 420px;
+  height: auto;
 }
 
 .square {
-  border: 1px solid blue;
-  width: 50px;
-  height: 50px;
+  border: 1px solid rgb(162, 174, 187);
+  background-color: rgba(27, 130, 199, 0.202);
+  margin: 1px;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  padding-top: 10px;
+}
+#computer-board > .square:hover {
+  filter: brightness(120%);
 }
 
-.ship {
-  background-color: rgb(48, 48, 207);
+#player-board > .ship {
+  background-color: rgba(64, 131, 208, 0.786);
 }
 
 .hit {
-  background-color: red;
+  position: relative;
+  z-index: 1;
+  background-color: rgba(64, 131, 208, 0.786);
+}
+.hit::before {
+  content: "";
+  display: block;
+  position: absolute;
+  z-index: -1;
+  top: 9px;
+  left: 9px;
+  width: 50%;
+  height: 50%;
+  border-radius: 50%;
+  background-color: rgba(255, 0, 0, 0.83);
+  box-shadow: 0 0 10px 5px rgba(255, 0, 0, 0.83);
 }
 
 .miss {
-  background-color: orange;
+  background-color: rgba(146, 181, 229, 0.834);
+}
+
+#restart-btn {
+  background-color: rgb(82, 130, 232);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+}
+#restart-btn:hover {
+  filter: brightness(120%);
 }

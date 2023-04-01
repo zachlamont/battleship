@@ -168,35 +168,41 @@ const computer = {
         x = Math.floor(Math.random() * 10);
         y = Math.floor(Math.random() * 10);
       }
-      const square = gameboard.board[y][x];
-      console.log(square);
-      if (square && !square.isHit) {
-        if (square.ship) {
-          // if hit a ship, mark as hit and set hasHitShip to true
-          gameboard.receiveAttack(x, y);
-          this.hasHitShip = true;
-          this.lastHit = [x, y];
+
+      if (x >= 0 && x < 10 && y >= 0 && y < 10) {
+        //check to ensure that the x and y values are within the bounds of the gameboard before accessing the board array
+        const square = gameboard.board[y][x];
+        console.log(square);
+        if (square && !square.isHit) {
+          if (square.ship) {
+            // if hit a ship, mark as hit and set hasHitShip to true
+            gameboard.receiveAttack(x, y);
+            this.hasHitShip = true;
+            this.lastHit = [x, y];
+            this.adjacentSquares = [
+              [-1, 0],
+              [0, -1],
+              [1, 0],
+              [0, 1],
+            ]; // reset the adjacent squares
+          } else {
+            // if miss, mark as miss and set hasHitShip to false
+            gameboard.receiveAttack(x, y);
+            this.hasHitShip = false;
+          }
+          attackCompleted = true;
+        } else if (this.hasHitShip && this.adjacentSquares.length === 0) {
+          // if no more adjacent squares to target, reset hasHitShip and adjacentSquares
+          this.hasHitShip = false;
           this.adjacentSquares = [
             [-1, 0],
             [0, -1],
             [1, 0],
             [0, 1],
-          ]; // reset the adjacent squares
-        } else {
-          // if miss, mark as miss and set hasHitShip to false
-          gameboard.receiveAttack(x, y);
-          this.hasHitShip = false;
+          ];
         }
-        attackCompleted = true;
-      } else if (this.hasHitShip && this.adjacentSquares.length === 0) {
-        // if no more adjacent squares to target, reset hasHitShip and adjacentSquares
+      } else {
         this.hasHitShip = false;
-        this.adjacentSquares = [
-          [-1, 0],
-          [0, -1],
-          [1, 0],
-          [0, 1],
-        ];
       }
     }
   },
@@ -228,20 +234,24 @@ function renderBoard(board, element) {
         console.log("yo" + board.board[i][j].ship);
         console.log("is hit" + board.board[i][j].isHit);
         square.classList.add("miss");
-        square.textContent = "miss";
+        square.textContent = "•";
       }
       if (board.board[i][j].ship !== null) {
         if (board.board[i][j].isHit === true) {
+          square.classList.add("ship");
           square.classList.add("hit");
-          square.textContent = "hit";
+          square.textContent = "";
         } else {
           square.classList.add("ship");
-          square.textContent = "ship";
         }
       }
 
       square.addEventListener("click", () => {
-        if (currentPlayer === player && !board.board[i][j].isHit) {
+        if (
+          currentPlayer === player &&
+          !board.board[i][j].isHit &&
+          square.parentElement === computerBoardElement
+        ) {
           currentPlayer.attack(computerBoard, j, i);
           renderBoard(computerBoard, computerBoardElement);
           switchTurns();
@@ -281,7 +291,7 @@ playGame();
 function restartGame() {
   playerBoard = gameboard();
   computerBoard = gameboard();
-  
+
   placeRandomShips(playerBoard);
   placeRandomShips(computerBoard);
 
@@ -289,9 +299,8 @@ function restartGame() {
   renderBoard(computerBoard, computerBoardElement);
   playGame();
 }
-
+//Restart Game button
 const restartBtn = document.getElementById("restart-btn");
 restartBtn.addEventListener("click", () => {
-
   restartGame();
 });
