@@ -110,8 +110,8 @@ export { reverseString, ship, gameboard };
 
 //MAIN GAME LOOP
 
-const playerBoard = gameboard();
-const computerBoard = gameboard();
+let playerBoard = gameboard();
+let computerBoard = gameboard();
 
 function placeRandomShips(board) {
   const shipLengths = [5, 4, 3, 3, 2];
@@ -276,3 +276,22 @@ function playGame() {
 renderBoard(playerBoard, playerBoardElement);
 renderBoard(computerBoard, computerBoardElement);
 playGame();
+
+// Restart game function
+function restartGame() {
+  playerBoard = gameboard();
+  computerBoard = gameboard();
+  
+  placeRandomShips(playerBoard);
+  placeRandomShips(computerBoard);
+
+  renderBoard(playerBoard, playerBoardElement);
+  renderBoard(computerBoard, computerBoardElement);
+  playGame();
+}
+
+const restartBtn = document.getElementById("restart-btn");
+restartBtn.addEventListener("click", () => {
+
+  restartGame();
+});
